@@ -1,5 +1,7 @@
 # Note 2016-06-25
 
+tags: Solved BinarySearch
+
 Since the difficulty level is medium, I tried the easiest way broad-first search, obviously failed(TLE).
 
 More efficient way is needed!
