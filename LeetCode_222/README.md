@@ -22,11 +22,13 @@ Then I optimized my method by reducing the bitset processing to bit processing i
 
 After all, my runtime cost is shown as below:
 
+![evaluation](../pics/lc222.png "Submision Runtime")
+
 ## My deficiency
 
 Since == and != have a hight priority than bitwise operations & > ^ > | > && > ||,
 
-We shall write our program like below
+We shall write our program like below.
 
 ```c++
 if( (a<<i) & num != 0)      // erroneous 
@@ -38,7 +40,6 @@ if( ((a<<i) & num) != 0)    // correct
 
 
 
-![evaluation](../pics/lc222.png "Submision Runtime")
 
 
 
