@@ -17,9 +17,9 @@ public:
         ListNode* cur = NULL;
         vector<ListNode*> *tmp_lists = new vector<ListNode*>(lists);
 
-        while(ture){
+        while(true){
             int min_val = INT_MAX;
-            ListNode* min_pos = NULL;
+            int min_pos = -1;
             int cnt = 0;
             for(auto it = tmp_lists->begin(); it != tmp_lists->end(); it++){
                 if(NULL == (*it)){
@@ -35,14 +35,14 @@ public:
                 return res;
             }
             if( res == NULL){
-                    res = cur = tmp_lists[min_pos];
-                    tmp_lists[min_pos] = tmp_lists[min_pos]->next;
+                    res = cur = (*tmp_lists)[min_pos];
+                    (*tmp_lists)[min_pos] = (*tmp_lists)[min_pos]->next;
             }else {
-                    cur->next = tmp_lists[min_pos];
+                    cur->next = (*tmp_lists)[min_pos];
                     cur = cur->next;
-                    tmp_lists[min_pos] = tmp_lists[min_pos]->next;
+                    (*tmp_lists)[min_pos] = (*tmp_lists)[min_pos]->next;
             }
         }
-        delete tmp_lists;   
+        delete tmp_lists;
     }
 };
