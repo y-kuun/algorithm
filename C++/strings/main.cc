@@ -104,9 +104,17 @@ int main(int argc, char* argv[])
 {
     char des[7] = "Hello ";
     char src[20] = " World ! ";
-    string str("hello World ! ");
-    dyk::replace_blank(str);
-    dyk::c_replace_blank(src, 20);
-    cout<<src<<endl;
+    string str("hello World!");
+    for(int i = 0; i < 1000; i++)
+    {
+        cout<<str[i];
+        str[i] = 'a';
+    }
+    cout<<endl;
+    for(int i = 0; i < 1000; i++)
+    {
+        cout<<str[i];
+    }
+    cout<<endl;
     return 0;
 }
