@@ -1,0 +1,401 @@
+cscope 15 $HOME/Algorithm/hihoCoder/week_102_sudoku -q 0000000037 0000001793
+	@main.cc
+
+1 
+	~<io¡»am
+>
+
+2 
+	~<queue
+>
+
+3 
+	~<b™£t
+>
+
+4 
+	~<c¡ršg
+>
+
+5 
+usšg
+ 
+Çme¥aû
+ 
+	g¡d
+;
+
+7 
+	tUINT8
+;
+
+10 þas 
+	csudoku
+{
+
+11 
+	mpublic
+:
+
+12 cÚ¡ 
+SIZE
+ = 10;
+
+13 
+UINT8
+ 
+	msudoku_m­
+[
+SIZE
+][SIZE];
+
+14 
+	mqueue
+<
+	mUINT8
+> 
+	m£¬ch_·th
+;
+
+15 
+dosudoku
+(
+x
+, 
+y
+);
+
+16 
+sudoku
+();
+
+17 
+	m´iv©e
+:
+
+18 
+b™£t
+<9> 
+row
+[
+SIZE
+];
+
+19 
+	mb™£t
+<9> 
+	mcÞumn
+[
+SIZE
+];
+
+20 
+	mb™£t
+<9> 
+	mzÚe
+[
+SIZE
+];
+
+22 
+š™SudokuS‘
+(
+x
+, 
+y
+, 
+v®ue
+);
+
+23 
+UINT8
+ 
+g‘ZÚe
+(
+x
+, 
+y
+);
+
+27 
+	gsudoku
+::
+	$sudoku
+(){
+
+28 
+i
+ = 0; i < 
+this
+->
+SIZE
+; i++){
+
+29 
+this
+->
+row
+[
+i
+].
+	`»£t
+();
+
+30 
+this
+->
+cÞumn
+[
+i
+].
+	`»£t
+();
+
+31 
+this
+->
+zÚe
+[
+i
+].
+	`»£t
+();
+
+35 
+	`mem£t
+(
+this
+->
+sudoku_m­
+, 0, (this->sudoku_map));
+
+36 !
+£¬ch_·th
+.
+	`em±y
+())
+
+37 
+£¬ch_·th
+.
+	`pÝ
+();
+
+38 
+	}
+}
+
+40 
+	gsudoku
+::
+	$š™SudokuS‘
+(
+x
+, 
+y
+, 
+v®ue
+){
+
+41 
+this
+->
+row
+[
+x
+].
+	`£t
+(
+v®ue
+);
+
+42 
+this
+->
+cÞumn
+[
+y
+].
+	`£t
+(
+v®ue
+);
+
+43 
+this
+->
+zÚe
+[
+	`g‘ZÚe
+(
+x
+, 
+y
+)].
+	`£t
+(
+v®ue
+);
+
+44 
+	}
+}
+
+46 
+UINT8
+ 
+	gsudoku
+::
+	$g‘ZÚe
+(
+x
+, 
+y
+)
+
+48 if(
+x
+ >= 1 && x <= 3){
+
+49 if(
+x
+ >= 1 && x <= 3)
+
+51 if(
+x
+ >= 4 && x <= 6)
+
+53 if(
+x
+ >= 7 && x <= 9)
+
+55 }if(
+x
+ >= 4 && x <= 6){
+
+56 if(
+x
+ >= 1 && x <= 3)
+
+58 if(
+x
+ >= 4 && x <= 6)
+
+60 if(
+x
+ >= 7 && x <= 6)
+
+62 }if(
+x
+ >= 7 && x <= 9){
+
+63 if(
+x
+ >= 1 && x <= 3)
+
+65 if(
+x
+ >= 4 && x <= 6)
+
+67 if(
+x
+ >= 7 && x <= 9)
+
+70 
+	}
+}
+
+74 
+	$maš
+(
+¬gc
+, ** 
+¬gv
+){
+
+75 
+ÿ£_num
+;
+
+76 
+x
+,
+y
+;
+
+77 
+šput_št
+;
+
+78 
+x
+ = -1;
+
+79 
+y
+ = -1;
+
+80 
+cš
+>>
+ÿ£_num
+;
+
+81 
+ÿ£_num
+--){
+
+82 
+i
+ = 1; i < 
+sudoku
+::
+SIZE
+; i++ ){
+
+83 
+j
+ = 1; j < 
+sudoku
+::
+SIZE
+; j++){
+
+84 
+cš
+>>
+šput_št
+;
+
+85 if(
+x
+ =ð-1 && 
+y
+ =ð-1 && 
+šput_št
+ == 0){
+
+86 
+x
+ = 
+i
+;
+
+87 
+y
+ = 
+j
+;
+
+94 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+1
+8
+main.cc
