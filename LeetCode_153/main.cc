@@ -2,9 +2,14 @@
 using namespace std;
 
 class Solution {
-  public:
+   public:
     int findMin(vector<int> &nums) {
+        int lhs, rhs;
         int sz = nums.size();
+        if (sz == 0) return 0;
+        if (sz == 1) return nums[0];
+        if (sz == 2) return nums[0] > nums[1] ? nums[1] : nums[0];
+
         int loc = -1;
         for (int i = 1; i < sz - 1; i++) {
             if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
@@ -12,11 +17,6 @@ class Solution {
                 break;
             }
         }
-        if (nums % 2 == 0) {
-            int lhs = nums / 2 - 1;
-            int rhs = nums / 2;
-        } else {
-            int mid = mums / 2;
-        }
+        return nums[loc + 1];
     }
 };
