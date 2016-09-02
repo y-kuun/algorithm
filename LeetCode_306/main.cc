@@ -12,7 +12,7 @@ using namespace std;
 class Solution {
    public:
     string add(int aloc, int alen, int bloc, int blen, string num) {
-        string res("");
+        string str("");
         int alow = aloc + alen - 1;
         int blow = bloc + blen - 1;
         int carry = 0;
@@ -22,7 +22,7 @@ class Solution {
             carry = tmp / 10;
             tmp = tmp % 10;
             char ch = '0' + tmp;
-            res = res + ch;
+            str += ch;
             alow--;
             blow--;
         }
@@ -32,7 +32,7 @@ class Solution {
             carry = tmp / 10;
             tmp = tmp % 10;
             char ch = '0' + tmp;
-            res = res + ch;
+            str += ch;
             alow--;
         }
 
@@ -41,15 +41,15 @@ class Solution {
             carry = tmp / 10;
             tmp = tmp % 10;
             char ch = '0' + tmp;
-            res = res + ch;
+            str += ch;
             blow--;
         }
 
         if (carry != 0) {
             char ch = '0' + carry;
-            res = res + ch;
+            str += ch;
         }
-        return res;
+        return str;
     }
 
     bool check_strs(string res, int loc, int len, string num) {
@@ -78,7 +78,7 @@ class Solution {
         string res;
 
         // it is very improtant to find the first two;
-        for (int total_len = 2;; total_len++) {
+        for (int total_len = 2; total_len < str_size; total_len++) {
             for (int i = 1; i < total_len; i++) {
                 int loc1 = 0;
                 int len1 = i;
@@ -90,12 +90,15 @@ class Solution {
                 bloc = loc2;
                 blen = len2;
                 cloc = bloc + blen;
+                if ((num[aloc] == '0' && alen != 1) ||
+                    (num[bloc] == '0' && blen != 1))
+                    continue;
             loop:
                 res = add(aloc, alen, bloc, blen, num);
                 clen = res.size();
-                if (clen > (str_size - clen))
-                    return false;
-                else if (res.size() == (str_size - clen)) {
+                if (clen > (str_size - cloc))
+                    continue;
+                else if (clen == (str_size - cloc)) {
                     if (check_strs(res, cloc, clen, num)) {
                         return true;
                     } else {
@@ -109,8 +112,9 @@ class Solution {
                         // check the rest of the nums;
                         aloc = bloc;
                         alen = blen;
-                        bloc = clen;
+                        bloc = cloc;
                         blen = clen;
+                        cloc = bloc + blen;
                         goto loop;
                     }
                 }
@@ -122,6 +126,10 @@ class Solution {
 
 int main() {
     Solution s;
-    cout << s.isAdditiveNumber("112358") << endl;
+    string req;
+    while (cin >> req) {
+        cout << s.isAdditiveNumber(req) << endl;
+    }
+    cout << s.isAdditiveNumber("112359") << endl;
     cout << s.isAdditiveNumber("199100199") << endl;
 }
