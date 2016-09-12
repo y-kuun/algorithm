@@ -20,12 +20,12 @@ int main() {
         for (i = 0; i < input_str.size(); i++) {
             if (input_str[i] == ',') {
                 money.push_back(stoi(input_str.substr(loc, i - loc)));
-                loc = i;
+                loc = i + 1;
             } else if (input_str[i] == ' ') {
                 loc = i;
             }
         }
-        if (loc - i == 0) {
+        if (loc - i != 0) {
             money.push_back(stoi(input_str.substr(loc, i - loc)));
         }
         dp0[0] = new vector<int>(money.size() + 1, 0);
