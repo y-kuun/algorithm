@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <cstdio>
 #include <iostream>
 #include <stack>
@@ -55,3 +56,5 @@ class sealed_class : public virtual Final_class<sealed_class> {
     sealed_class();
     ~sealed_class();
 };
+=======
+>>>>>>> 569480bd2d065717c01d63a88f6ef5349486ece9
