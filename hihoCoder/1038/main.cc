@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
             if (weight[i] <= j) {
                 dp[i][j] =
                     max(dp[i - 1][j - weight[i]] + value[i], dp[i - 1][j]);
-            }
+            } else
+                dp[i][j] = dp[i - 1][j];
         }
     }
 
