@@ -16,10 +16,35 @@ int fib(int x = 1) {
     return sum;
 }
 
-int main() {
-    std::thread t(fib, 10);
-    std::future<int> f1 = std::async(fib, 10);
+class base {
+   public:
+    base(int i = 1) : bi(i){};
+    void print(void) { std::cout << bi << std::endl; }
+    void set(int i = 0) { bi = i; }
 
-    std::cout << f1.get() << std::endl;
+   private:
+    int bi;
+};
+
+class drived : public base {
+   private:
+    int di;
+
+   public:
+    drived(int i) : di(i), base(i){};
+};
+
+void func() {
+    char str[10];
+    gets(str);
+    std::cout << str << std::endl;
+}
+
+int main() {
+    std::cout << "Call func" << std::endl;
+    func();
+
+    std::cout << "Call func ends" << std::endl;
+
     return 0;
 }

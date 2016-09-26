@@ -27,9 +27,10 @@ class WorkerPool {
         active_ = true;
         all_thread_.resize(worker_num);
         for (int i = 0; i < worker_num; i++) {
-            all_thread_[i] =
-                new std::thread(std::bind(&THIS_TYPE::consumer, this));
+            all_thread_[i] = new std::thread(
+                std::bind(&THIS_TYPE::consumer, this));  // 所有的thread
         }
+        // 所有的thread需要进行同一个函数的工作
         proc_ = f;
     }
     //生产者
