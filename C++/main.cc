@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <future>
 #include <iostream>
 
@@ -41,10 +42,10 @@ void func() {
 }
 
 int main() {
-    std::cout << "Call func" << std::endl;
-    func();
-
-    std::cout << "Call func ends" << std::endl;
+    int ykdb = 0;
+    const int ykda = 0;
+    std::cout << (void *)&ykda << std::endl;
+    std::cout << (void *)&ykdb << std::endl;
 
     return 0;
 }
