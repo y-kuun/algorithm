@@ -1,6 +1,9 @@
+#include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <future>
 #include <iostream>
+#include <vector>
 
 int fib(int x = 1) {
     if (x == 1) return 1;
@@ -42,10 +45,20 @@ void func() {
 }
 
 int main() {
-    int ykdb = 0;
-    const int ykda = 0;
-    std::cout << (void *)&ykda << std::endl;
-    std::cout << (void *)&ykdb << std::endl;
+    int n, m;
+    std::cin >> n >> m;
+    srand(time(NULL));
+    std::vector<int> vec;
+    vec.push_back(0);
+    vec.push_back(n);
 
+    for (int i = 0; i < m - 1; i++) {
+        vec.push_back(rand() % n);
+    }
+    std::sort(vec.begin(), vec.end());
+    for (int i = 1; i < vec.size(); i++) {
+        std::cout << vec[i] - vec[i - 1] << " ";
+    }
+    std::cout << std::endl;
     return 0;
 }
