@@ -3,8 +3,12 @@
 #include <cstdlib>
 #include <future>
 #include <iostream>
+#include <list>
 #include <set>
+#include <stack>
 #include <vector>
+
+using namespace std;
 
 int fib(int x = 1) {
     if (x == 1) return 1;
@@ -64,22 +68,26 @@ int main() {
 
     std::vector<int> arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::set<int> sarr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::stack<int, list<int> > st;
 
-    for (auto it = sarr.begin(); it != sarr.end();) {
-        auto p = it;
-        it++;
-        std::cout << *p << " ";
-        if (*p == 5) {
-            sarr.erase(p);
-        }
-        std::cout << *p << std::endl;
+    auto func = [&arr]() -> void {
+        arr[arr.size() - 1] = 10;
+        cout << "Lamda Func" << endl;
+        for (auto i : arr) cout << i << " ";
+        cout << endl;
+    };
+
+    func();
+
+    for (auto it = arr.begin(); it != arr.end();) {
+        std::cout << *it << " ";
+        if (*it == 5) {
+            arr.erase(it);
+        } else
+            it++;
+        std::cout << *it << std::endl;
     }
 
-    for (auto i : c) {
-        std::cout << i << std::endl;
-    }
-
-    std::cout << (void*)&c << " " << (void*)&c[0] << std::endl;
     /*
     print_arr(b, 100);
     print_arr(c, 100);
