@@ -1,2 +1,5 @@
 *.o
 *.exe
+*.stackdump
+*.VC.DB
+*.swp
