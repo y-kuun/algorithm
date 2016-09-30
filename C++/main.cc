@@ -27,9 +27,19 @@ int fib(int x = 1) {
 
 class base {
    public:
-    base(int i = 1) : bi(i){};
+    base(int i = 1) : bi(i) { cout << "BASE!" << endl; };
+    base(base& rhs) {
+        bi = rhs.bi;
+        cout << "COPY" << endl;
+    }
+    base& operator=(const base& rhs) {
+        bi = rhs.bi;
+        cout << "=" << endl;
+        return *this;
+    }
     void print(void) { std::cout << bi << std::endl; }
     void set(int i = 0) { bi = i; }
+    void add(base& a) { cout << a.bi + bi << endl; }
 
    private:
     int bi;
@@ -59,7 +69,26 @@ void print_arr(int* p, int n) {
     std::cout << std::endl;
 }
 
+void sum(int a, int b) { cout << a + b << endl; }
+
 int main() {
+    base b;
+    base c;
+
+    b.add(c);
+
+    auto afunc = []() -> int {
+        cout << "Param1" << endl;
+        return 1;
+    };
+    auto bfunc = []() -> int {
+        cout << "Param2" << endl;
+        return 2;
+    };
+
+    sum(afunc(), bfunc());
+    /*
+
     int i = 10;
     const int* pi = &i;
 
@@ -88,7 +117,6 @@ int main() {
         std::cout << *it << std::endl;
     }
 
-    /*
     print_arr(b, 100);
     print_arr(c, 100);
     print_arr(pd, 100);
