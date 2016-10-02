@@ -2,7 +2,7 @@
 #include <unordered_map>
 using namespace std;
 
-// LRUCache 使用了list 以及 unordered_map
+// LRUCache 使用了list 以及 unordered_maps
 
 class LRUCache {
    public:
