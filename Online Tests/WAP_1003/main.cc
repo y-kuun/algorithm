@@ -10,11 +10,12 @@
 
 using namespace std;
 
-int dp[1001][101][3] = {0};  // for the tree dp
+int dp[1001][101][3];  // for the tree dp
+int room_map[1001][1001];
+int room_point[1001];
 int n, m;
 
-bool walker(int cur_id, vector<vector<int>> &room_map,
-            vector<int> &room_point) {
+bool walker(int cur_id, int **room_map, int *room_point) {
     if (cur_id == -1) {
         return false;
     }
@@ -53,7 +54,7 @@ bool walker(int cur_id, vector<vector<int>> &room_map,
             else
                 lval = 0;
             if (right != -1)
-                rval = dp[right][m - j][0];
+                rval = dp[right][i - j][0];
             else
                 rval = 0;
             if (sum < lval + rval) {
@@ -72,7 +73,7 @@ bool walker(int cur_id, vector<vector<int>> &room_map,
             if (left != -1) {
                 for (int k = 0; k < 3; k++) {
                     if (rval < dp[left][j][k]) {
-                        rval = dp[left][i][k];
+                        rval = dp[left][j][k];
                     }
                 }
             } else {
@@ -80,8 +81,8 @@ bool walker(int cur_id, vector<vector<int>> &room_map,
             }
             if (right != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][m - j][k]) {
-                        rval = dp[left][m - i][k];
+                    if (rval < dp[left][i - j][k]) {
+                        rval = dp[left][i - j][k];
                     }
                 }
             } else {
@@ -104,7 +105,7 @@ bool walker(int cur_id, vector<vector<int>> &room_map,
             if (left != -1) {
                 for (int k = 0; k < 3; k++) {
                     if (rval < dp[left][j][k]) {
-                        rval = dp[left][i][k];
+                        rval = dp[left][j][k];
                     }
                 }
             } else {
@@ -112,8 +113,8 @@ bool walker(int cur_id, vector<vector<int>> &room_map,
             }
             if (right != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][m - j][k]) {
-                        rval = dp[left][m - i][k];
+                    if (rval < dp[left][i - j][k]) {
+                        rval = dp[left][i - j][k];
                     }
                 }
             } else {
@@ -142,11 +143,11 @@ int main(int argc, char **argv) {
         }
     }
 
-    vector<int> room_point(n + 1);
-    vector<vector<int>> room_map(n + 1);
-
-    for (auto &i : room_map) {
-        i = vector<int>(n + 1, 0);
+    for (int i = 0; i < 1001; i++) {
+        room_point[i] = 0;
+        for (int j = 0; j < 1001; j++) {
+            room_map[i][j] = 0;
+        }
     }
 
     for (int i = 0; i < n; i++) {
