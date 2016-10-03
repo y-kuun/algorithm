@@ -10,101 +10,143 @@
 
 using namespace std;
 
-struct treeNode {
-    int id;
-    int point;
-    struct treeNode *left;
-    struct treeNode *right;
-    treeNode(int _id = 0, int _point = 0)
-        : id(_id), point(_point), left(NULL), right(NULL){};
-};
+int dp[1001][101][3] = {0};  // for the tree dp
+int n, m;
 
-using TreeNode_p = struct treeNode *;
+bool walker(int cur_id, vector<vector<int>> &room_map,
+            vector<int> &room_point) {
+    if (cur_id == -1) {
+        return false;
+    }
+    int left = -1;
+    int right = -1;
+    for (int i = 0; i <= n; i++) {
+        if (room_map[cur_id][i] == 1) {
+            room_map[cur_id][i] = room_map[i][cur_id] = 0;
+            if (left == -1) {
+                left = i;
+            } else
+                right = i;
+        }
+    }
 
-int dp[3][1001][101] = {0};  // for the tree dp
+    walker(left, room_map, room_point);
+    walker(right, room_map, room_point);
 
-TreeNode_p TreeGenerate(int root_id, vector<vector<int>> room_map,
-                        vector<int> room_point) {
-    int room_number = room_point.size();
-    queue<int> id_queue;
-    queue<TreeNode_p> node_queue;
-    TreeNode_p head = new struct treeNode(root_id, room_point[root_id]);
+    // if current node is a leave node
+    if (left == -1 && right == -1) {
+        for (int i = 1; i <= m; i++) {
+            dp[cur_id][i][2] = room_point[cur_id - 1];
+        }
+        return false;
+    }
 
-    // we choose a node with degree 1 as the root of the tree;
-    id_queue.push(root_id);
-    id_queue.push(-1);
-    node_queue.push(head);
-    while (!node_queue.empty()) {
-        int cur_id;
-        TreeNode_p cur_node;
-        TreeNode_p tmp;
-        int cnt;
-
-        cur_node = node_queue.front();
-        node_queue.pop();
-
-        // handle the left child tree
-        cur_id = id_queue.front();
-        id_queue.pop();
-        if (cur_id != -1) {
-            tmp = new struct treeNode(cur_id, room_point[root_id]);
-            cur_node->left = tmp;
-
-            cnt = 0;
-            for (int i = 0; i < room_number; i++) {
-                if (room_map[cur_id][i] == 1) {
-                    room_map[cur_id][i] = room_map[i][cur_id] = 0;
-                    id_queue.push(i);
-                    cnt++;
-                }
-            }
-            // if the any child exists
-            if (cnt > 0) {
-                node_queue.push(cur_node->left);
-                if (cnt == 1) id_queue.push(-1);
+    // if current node is not a leave node
+    // situation 1: current node is not picked and no wifi
+    for (int i = 0; i <= m; i++) {
+        int sum = 0;
+        int lval;
+        int rval;
+        for (int j = 0; j <= i; j++) {
+            if (left != -1)
+                lval = dp[left][j][0];
+            else
+                lval = 0;
+            if (right != -1)
+                rval = dp[right][m - j][0];
+            else
+                rval = 0;
+            if (sum < lval + rval) {
+                sum = lval + rval;
             }
         }
-        // handle the right child tree
-        cur_id = id_queue.front();
-        id_queue.pop();
-        if (cur_id != -1) {
-            tmp = new struct treeNode(cur_id, room_point[root_id]);
-            cur_node->right = tmp;
-
-            cnt = 0;
-            for (int i = 0; i < room_number; i++) {
-                if (room_map[cur_id][i] == 1) {
-                    room_map[cur_id][i] = room_map[i][cur_id] = 0;
-                    id_queue.push(i);
-                    cnt++;
+        dp[cur_id][i][0] = sum;
+    }
+    // situation 2: current node is not picked but at least one of his child
+    // has;
+    for (int i = 0; i <= m; i++) {
+        int sum = 0;
+        int lval = 0;
+        int rval = 0;
+        for (int j = 0; j <= i; j++) {
+            if (left != -1) {
+                for (int k = 0; k < 3; k++) {
+                    if (rval < dp[left][j][k]) {
+                        rval = dp[left][i][k];
+                    }
                 }
+            } else {
+                lval = 0;
             }
-            // if the any child exists
-            if (cnt > 0) {
-                node_queue.push(cur_node->right);
-                if (cnt == 1) id_queue.push(-1);
+            if (right != -1) {
+                for (int k = 0; k < 3; k++) {
+                    if (rval < dp[left][m - j][k]) {
+                        rval = dp[left][m - i][k];
+                    }
+                }
+            } else {
+                rval = 0;
+            }
+            auto tmp = max(dp[left][j][2] + rval, dp[left][m - j][2] + lval);
+            if (sum < tmp) {
+                sum = tmp;
             }
         }
-    }  // while ends
-    auto p = head;
-    head = head->left;
-    delete p;
-    return head;
-}
-
-dprogram(TreeNode_p p, m) {
-    if (m == 0) return 0;
+        dp[cur_id][i][1] = sum + room_point[cur_id - 1];
+    }
+    // pick the current one, and no matter his children's situation
+    for (int i = 0; i <= m; i++) {
+        int sum = 0;
+        int lval;
+        int rval;
+        // the choose all children of current node share i - 1 wifi router(s)
+        for (int j = 0; j < i; j++) {
+            if (left != -1) {
+                for (int k = 0; k < 3; k++) {
+                    if (rval < dp[left][j][k]) {
+                        rval = dp[left][i][k];
+                    }
+                }
+            } else {
+                lval = 0;
+            }
+            if (right != -1) {
+                for (int k = 0; k < 3; k++) {
+                    if (rval < dp[left][m - j][k]) {
+                        rval = dp[left][m - i][k];
+                    }
+                }
+            } else {
+                rval = 0;
+            }
+            auto tmp = rval + lval;
+            if (sum < tmp) {
+                sum = tmp;
+            }
+        }
+        dp[cur_id][i][2] = sum + room_point[cur_id - 1];
+    }
+    return true;
 }
 
 int main(int argc, char **argv) {
-    int n, m;
+    // read from a input file
+    freopen("input.txt", "r+", stdin);
     cin >> n >> m;
 
-    vector<int> room_point(n);
-    vector<vector<int>> room_map(n);
+    for (int i = 0; i < 1001; i++) {
+        for (int j = 0; j < 101; j++) {
+            for (int k = 0; k < 3; k++) {
+                dp[i][j][k] = 0;
+            }
+        }
+    }
+
+    vector<int> room_point(n + 1);
+    vector<vector<int>> room_map(n + 1);
 
     for (auto &i : room_map) {
-        i = vector<int>(n, 0);
+        i = vector<int>(n + 1, 0);
     }
 
     for (int i = 0; i < n; i++) {
@@ -131,11 +173,13 @@ int main(int argc, char **argv) {
         }
     }
 
-    TreeNode_p head = TreeGenerate(root_id, room_map, room_point);
+    walker(root_id, room_map, room_point);
 
-    for (int i = 1; i <= m; i++) {
-        dprogram(head, i);
-    }
+    auto ans = max(dp[root_id][m][0], dp[root_id][m][1]);
+
+    ans = max(ans, dp[root_id][m][2]);
+
+    cout << ans << endl;
 
     return 0;
 }

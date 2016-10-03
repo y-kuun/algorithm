@@ -4,6 +4,7 @@
 // Description: overlayed small cubes is not considered, and only one solution
 // is guaranteed
 // ID:  f3c2f5e2-a2ff-4103-b30d-9ca82d52375d
+// ID:  fa23d473-c923-4e8f-8956-c428ecb131dc
 
 #include <cstdio>
 #include <iostream>
