@@ -10,12 +10,12 @@
 
 using namespace std;
 
-int dp[1001][101][3];  // for the tree dp
-int room_map[1001][1001];
-int room_point[1001];
-int n, m;
+static int dp[1001][101][3];    // for the tree dp
+static int room_map[1001][1001];
+static int room_point[1001];
+static int n, m;
 
-bool walker(int cur_id, int **room_map, int *room_point) {
+bool walker(int cur_id) {
     if (cur_id == -1) {
         return false;
     }
@@ -31,8 +31,8 @@ bool walker(int cur_id, int **room_map, int *room_point) {
         }
     }
 
-    walker(left, room_map, room_point);
-    walker(right, room_map, room_point);
+    walker(left);
+    walker(right);
 
     // if current node is a leave node
     if (left == -1 && right == -1) {
@@ -46,8 +46,8 @@ bool walker(int cur_id, int **room_map, int *room_point) {
     // situation 1: current node is not picked and no wifi
     for (int i = 0; i <= m; i++) {
         int sum = 0;
-        int lval;
-        int rval;
+        int lval = 0;
+        int rval = 0;
         for (int j = 0; j <= i; j++) {
             if (left != -1)
                 lval = dp[left][j][0];
@@ -72,8 +72,8 @@ bool walker(int cur_id, int **room_map, int *room_point) {
         for (int j = 0; j <= i; j++) {
             if (left != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][j][k]) {
-                        rval = dp[left][j][k];
+                    if (lval < dp[left][j][k]) {
+                        lval = dp[left][j][k];
                     }
                 }
             } else {
@@ -81,31 +81,47 @@ bool walker(int cur_id, int **room_map, int *room_point) {
             }
             if (right != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][i - j][k]) {
-                        rval = dp[left][i - j][k];
+                    if (rval < dp[right][i - j][k]) {
+                        rval = dp[right][i - j][k];
                     }
                 }
             } else {
                 rval = 0;
             }
-            auto tmp = max(dp[left][j][2] + rval, dp[left][m - j][2] + lval);
+            int tmp;
+            if (right == -1)
+                tmp = dp[left][j][2];
+            else if (left == -1) {
+                tmp = dp[right][m - j][2];
+            } else {
+                tmp = max(dp[left][j][2] + rval, dp[right][m - j][2] + lval);
+            }
             if (sum < tmp) {
                 sum = tmp;
             }
         }
-        dp[cur_id][i][1] = sum + room_point[cur_id - 1];
+        if (i != 0)
+            dp[cur_id][i][1] = sum + room_point[cur_id - 1];
+        else
+            dp[cur_id][i][1] = sum;
     }
     // pick the current one, and no matter his children's situation
     for (int i = 0; i <= m; i++) {
         int sum = 0;
-        int lval;
-        int rval;
+        int lval = 0;
+        int rval = 0;
         // the choose all children of current node share i - 1 wifi router(s)
         for (int j = 0; j < i; j++) {
             if (left != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][j][k]) {
-                        rval = dp[left][j][k];
+                    if (k == 0) {
+                        if (lval < dp[left][j][k] + room_point[left-1]) {
+                            lval = dp[left][j][k] + room_point[left-1];
+                        }
+                    } else {
+                        if (lval < dp[left][j][k]) {
+                            lval = dp[left][j][k];
+                        }
                     }
                 }
             } else {
@@ -113,8 +129,12 @@ bool walker(int cur_id, int **room_map, int *room_point) {
             }
             if (right != -1) {
                 for (int k = 0; k < 3; k++) {
-                    if (rval < dp[left][i - j][k]) {
-                        rval = dp[left][i - j][k];
+                    if (rval < dp[right][i - j][k]) {
+                        rval = dp[right][i - j][k];
+                    }
+                    if (k == 0) {
+                        if (rval < dp[right][i - j][k] + room_point[right-1])
+                            rval = dp[right][i - j][k] + room_point[right-1];
                     }
                 }
             } else {
@@ -125,9 +145,30 @@ bool walker(int cur_id, int **room_map, int *room_point) {
                 sum = tmp;
             }
         }
-        dp[cur_id][i][2] = sum + room_point[cur_id - 1];
+        if (i != 0)
+            dp[cur_id][i][2] = sum + room_point[cur_id - 1];
+        else
+            dp[cur_id][i][2] = sum;
     }
     return true;
+}
+
+void print_map() {
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= n; j++) {
+            cout << room_map[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void print_dp(int k) {
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= m; j++) {
+            cout << dp[i][j][k] << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main(int argc, char **argv) {
@@ -157,11 +198,13 @@ int main(int argc, char **argv) {
     for (int i = 1; i < n; i++) {
         int x, y;
         cin >> x >> y;
-        room_map[x][y] = room_map[y][x] = 1;
+        room_map[x][y] = 1;
+        room_map[y][x] = 1;
     }
 
     // there must be a node with degree 1, we choose it to generate the binary
     // tree
+
     int root_id;
     for (int i = 0; i < n; i++) {
         int degree = 0;
@@ -174,7 +217,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    walker(root_id, room_map, room_point);
+    walker(root_id);
 
     auto ans = max(dp[root_id][m][0], dp[root_id][m][1]);
 
