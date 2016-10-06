@@ -44,15 +44,37 @@ class base {
     void set(int i = 0) { bi = i; }
     void add(base& a) { cout << a.bi + bi << endl; }
 
+    bool cf1(int a) { return false; }
+    bool cf1(int a) const { return true; }
+
+    virtual bool vcf1(int a) { return false; }
+    virtual bool vcf1(int a) const { return true; }
+
+    void hello(void) const;
+
    private:
+    const static int a;
     int bi;
 };
+
+const int base::a = 10;
+
+void base::hello(void) const { cout << "Hello, World!" << endl; }
 
 class drived : public base {
    private:
     int di;
 
    public:
+    bool vcf1(int a) {
+        cout << "This is drived!" << endl;
+        return true;
+    }
+    bool vcf1(int a) const {
+        cout << "This is drived! const" << endl;
+        return true;
+    }
+
     // using base::vfunc03;
     drived(int i = 0) : di(i), base(i) { cout << "DRIVED" << endl; };
     void vfunc01(void) { std::cout << "drived::vfunc01" << endl; }
@@ -75,9 +97,44 @@ void print_arr(int* p, int n) {
     std::cout << std::endl;
 }
 
+const char* getv() {
+    char* p = "1234";
+    return p;
+}
+
 void sum(int a, int b) { cout << a + b << endl; }
 
 int main() {
+    base b;
+    drived d;
+    base* p = &d;
+    int a = 10;
+    const char* ap = getv();
+    const char* c = getv();
+
+    const base cb;
+    const int bi = 10;
+    base* const cbp = &b;
+
+    const base& cp = cb;
+
+    cout << b.cf1(10) << endl;
+    cout << b.cf1(a) << endl;
+    cout << b.cf1(bi) << endl;
+
+    cout << cb.cf1(a) << endl;
+    cout << cb.cf1(bi) << endl;
+    cout << cb.vcf1(a) << endl;
+    cout << cb.vcf1(bi) << endl;
+
+    cout << "" << endl;
+
+    cout << cbp->cf1(a) << endl;
+    cout << cbp->cf1(bi) << endl;
+    cout << cbp->vcf1(a) << endl;
+    cout << cbp->vcf1(bi) << endl;
+
+    /*
     base* bp;
     bp = new drived;
     base b;
@@ -88,7 +145,6 @@ int main() {
     d.vfunc03(&d);
     d.vfunc03(&b);
 
-    /*
 
     int i = 10;
     const int* pi = &i;
