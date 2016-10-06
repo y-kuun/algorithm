@@ -34,9 +34,12 @@ class base {
     }
     base& operator=(const base& rhs) {
         bi = rhs.bi;
-        cout << "=" << endl;
+        cout << "copy=" << endl;
         return *this;
     }
+    virtual void vfunc01(void) { std::cout << "base::vfunc01" << endl; }
+    virtual void vfunc02(int) { std::cout << "base::vfunc02" << endl; }
+    virtual void vfunc03(base*) { std::cout << "base::vfunc03" << endl; }
     void print(void) { std::cout << bi << std::endl; }
     void set(int i = 0) { bi = i; }
     void add(base& a) { cout << a.bi + bi << endl; }
@@ -50,7 +53,10 @@ class drived : public base {
     int di;
 
    public:
-    drived(int i) : di(i), base(i){};
+    // using base::vfunc03;
+    drived(int i = 0) : di(i), base(i) { cout << "DRIVED" << endl; };
+    void vfunc01(void) { std::cout << "drived::vfunc01" << endl; }
+    void vfunc03(base*) { std::cout << "drived::vfunc03" << endl; }
 };
 
 void func() {
@@ -72,21 +78,16 @@ void print_arr(int* p, int n) {
 void sum(int a, int b) { cout << a + b << endl; }
 
 int main() {
+    base* bp;
+    bp = new drived;
     base b;
-    base c;
+    drived d;
 
-    b.add(c);
+    bp->vfunc01();
+    bp->vfunc03(&d);
+    d.vfunc03(&d);
+    d.vfunc03(&b);
 
-    auto afunc = []() -> int {
-        cout << "Param1" << endl;
-        return 1;
-    };
-    auto bfunc = []() -> int {
-        cout << "Param2" << endl;
-        return 2;
-    };
-
-    sum(afunc(), bfunc());
     /*
 
     int i = 10;
