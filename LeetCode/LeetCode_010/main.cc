@@ -38,8 +38,9 @@ class Solution {
                     pi++;
                 }
             } else if (p[pi] == '.') {
-                return isMatch(s.substr(si + 1, lens - si - 1),
-                               p.substr(pi + 1, lenp - pi - 1));
+                p[pi] = s[si];
+                return isMatch(s.substr(si, lens - si),
+                               p.substr(pi, lenp - pi));
             } else if (pi + 1 < lenp && p[pi + 1] == '*') {
                 // 如果当前的值不想等，而pattern之后是一个*那么跳过不相关的pattern
                 return isMatch(s.substr(si), p.substr(pi + 2, lenp - pi - 2));
