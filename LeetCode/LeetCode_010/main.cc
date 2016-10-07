@@ -13,14 +13,13 @@ class Solution {
             return false;
         }
         if (lens == 0) {
-            for(int i = 0; i < lenp; i++)
-            {   
-                if (p[i] != '*'){
-                    if(p[i] == '.' && i + 1 < lenp && p[i+1] == '*'){
+            for (int i = 0; i < lenp; i++) {
+                if (p[i] != '*') {
+                    if (i + 1 < lenp && p[i + 1] == '*') {
                         continue;
                     }
                     return false;
-                } 
+                }
             }
             return true;
         }
@@ -45,11 +44,15 @@ class Solution {
                 }
             } else if (p[pi] == '.') {
                 if (pi + 1 < lenp && p[pi + 1] == '*') {
-                    return isMatch(s.substr(si + 1, lens - si - 1),
-                                   p.substr(pi, lenp - pi));
-                } else
-                    return isMatch(s.substr(si + 1, lens - si - 1),
-                                   p.substr(pi + 1, lenp - pi - 1));
+                    bool ans = false;
+                    for (int i = 0; !ans && si + i <= lens; i++) {
+                        ans = isMatch(s.substr(si + i, lens - si - i),
+                                      p.substr(pi + 2, lenp - pi - 2));
+                    }
+                    return ans;
+                }
+                return isMatch(s.substr(si + 1, lens - si - 1),
+                               p.substr(pi + 1, lenp - pi - 1));
             } else if (pi + 1 < lenp && p[pi + 1] == '*') {
                 // 如果当前的值不想等，而pattern之后是一个*那么跳过不相关的pattern
                 return isMatch(s.substr(si), p.substr(pi + 2, lenp - pi - 2));
