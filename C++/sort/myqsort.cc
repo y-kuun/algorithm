@@ -41,6 +41,21 @@ void qsort(InputIt begin, InputIt end) {
 int main(int argc, char** argv) {
     vector<string> vec = {"123123",   "absdsd", "gffg",
                           "435sdasd", "oiuwer", "zxcsdfr"};
+
+    vector<int> arr = {1, 5, 6, 7, 3, 3, 4, 5, 6, 7, 8, 9};
+
+    for (auto i : arr) {
+        cout << i << " ";
+    }
+    cout << endl;
+    sort(arr.begin(), arr.end(), [](int a, int b) { return a > b; });
+    auto it = next(arr.begin(), distance(arr.begin(), arr.end()) / 2);
+    cout << *it << endl;
+    for (auto i : arr) {
+        cout << i << " ";
+    }
+    cout << endl;
+
     auto vvec(vec);
     for (auto i : vec) {
         cout << i << " ";

@@ -12,7 +12,8 @@ struct TreeLinkNode {
     TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
 };
 
-
+/**
+利用了是一个erfect binary tree的特性，记录每一层次
 class Solution {
     public:
         void connect(TreeLinkNode *root) {
@@ -51,4 +52,24 @@ class Solution {
                 }
             }
         }
+};
+*/
+
+class Solution {
+    void connect(TreeNode *root, TreeNode *sibling) {
+        if (root == nullptr) {
+            return;
+        }
+
+        root->next = sibling;
+        connect(root->left, root->right);
+
+        if (sibling != nullptr) {
+            connect(root->right, sibling->left);
+        } else
+            connect(root->right, sibling);
+    }
+
+   public:
+    void connect(TreeLinkNode *root) { connect(root, nullptr); }
 };
